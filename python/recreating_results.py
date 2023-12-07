@@ -45,5 +45,13 @@ def main():
     # plt.show()
 
 
+def write_simple_clique_graph_to_rust(n=3, m=3, N=900):
+    G = create_simple_clique_graph(n, m, N)
+    file_name = f"simple_clique_graph_{n}_{m}_{N}.el"
+    file_path = "../rust/resources/" + file_name
+    nx.write_edgelist(G, file_path, data=False)
+
+
 if __name__ == "__main__":
+    # write_simple_clique_graph_to_rust()
     main()

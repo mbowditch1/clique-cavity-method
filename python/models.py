@@ -21,15 +21,23 @@ def create_simple_clique_graph(clique_size, num_cliques_per_node, N):
     cliques_to_connect = [cq["id"] for cq in cliques if cq["remaining_nodes"] != 0]
     failures = 0
     while True:
+        if failures > 1000:
+            G = create_simple_clique_graph(clique_size, num_cliques_per_node, N)
+            return G
         nd = random.sample(nodes_to_connect, 1)[0]
-        cq = random.sample(nodes_to_connect, 1)[0]
+        cq = random.sample(cliques_to_connect, 1)[0]
+
         # Check if clique already contains node
         if nd in cliques[cq]["nodes"]:
             failures += 1
-            if failures > 1000:
-                G = create_simple_clique_graph(clique_size, num_cliques_per_node, N)
-                return G
             continue
+
+        # Check if clique contains neighbour of node
+        for nd2 in cliques[cq]["nodes"]:
+            for cq2 in nodes[nd]["cliques"]:
+                if nd2 in cliques[cq2]["nodes"]:
+                    failures += 1
+                    continue
 
         nodes[nd]["cliques"].append(cq)
         nodes[nd]["remaining_cliques"] -= 1
