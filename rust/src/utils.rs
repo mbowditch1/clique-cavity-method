@@ -1,7 +1,8 @@
 use na::DMatrix;
+use graph::prelude::*;
 
-pub fn create_hashimoto(G: UndirectedCsrGraph<usize>) -> UndirectedCsrGraph<usize> {
-    let n_edges = graph.edge_count();
+pub fn create_hashimoto(G: UndirectedCsrGraph<usize>) -> DMatrix<f64> {
+    let n_edges = G.edge_count();
     let mut matrix = DMatrix::zeros(n_edges, n_edges);
     
  
@@ -21,4 +22,17 @@ pub fn create_hashimoto(G: UndirectedCsrGraph<usize>) -> UndirectedCsrGraph<usiz
  //    }
  
     matrix
+}
+
+
+pub fn arange(start: f64, end: f64, step: f64) -> Vec<f64> {
+    let mut result = Vec::new();
+    let mut current = start;
+
+    while current < end {
+        result.push(current);
+        current += step;
+    }
+
+    result
 }

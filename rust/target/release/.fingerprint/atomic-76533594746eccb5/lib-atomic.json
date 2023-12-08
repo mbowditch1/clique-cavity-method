@@ -1,0 +1,1 @@
+{"rustc":7419878829587384386,"features":"[\"default\", \"fallback\"]","target":5096716490591200747,"profile":6269190295429226618,"path":156371405192514820,"deps":[],"local":[{"CheckDepInfo":{"dep_info":"release/.fingerprint/atomic-76533594746eccb5/dep-lib-atomic"}}],"rustflags":[],"metadata":11306898659068228631,"config":2202906307356721367,"compile_kind":0}
