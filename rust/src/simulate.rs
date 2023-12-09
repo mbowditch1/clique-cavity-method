@@ -5,7 +5,8 @@ use std::fs::File;
 use std::error::Error;
 use csv::Writer;
 
-pub fn SIR_step(G: &UndirectedCsrGraph<usize>, I: &mut Vec<usize>, R: &mut Vec<usize>, stats: &mut Vec<(usize, usize, usize)>, T: f64) {
+
+pub fn SIR_step(G: &UndirectedCsrGraph<usize>, I: &mut Vec<usize>, R: &mut Vec<usize>, stats: &mut Vec<(usize, usize, usize)>, T: f32) {
     let mut rng = rand::thread_rng();
 
     // Recover infected nodes
@@ -19,7 +20,7 @@ pub fn SIR_step(G: &UndirectedCsrGraph<usize>, I: &mut Vec<usize>, R: &mut Vec<u
         let neighbors = G.neighbors(*i);
         for n in neighbors {
             if !I.contains(&n) && !R.contains(&n) && !new_infected.contains(&n) {
-                if rng.gen::<f64>() < T {
+                if rng.gen::<f32>() < T {
                     new_infected.push(*n);
                 }
             }
@@ -32,7 +33,7 @@ pub fn SIR_step(G: &UndirectedCsrGraph<usize>, I: &mut Vec<usize>, R: &mut Vec<u
 }
 
 
-pub fn SIR(G: &UndirectedCsrGraph<usize>, T: f64, initial_infected: usize) -> (Vec<(usize, usize, usize)>, Vec<usize>) {
+pub fn SIR(G: &UndirectedCsrGraph<usize>, T: f32, initial_infected: usize) -> (Vec<(usize, usize, usize)>, Vec<usize>) {
     let mut rng = rand::thread_rng();
 
     let mut I: Vec<usize> = Vec::new();
@@ -56,15 +57,17 @@ pub fn SIR(G: &UndirectedCsrGraph<usize>, T: f64, initial_infected: usize) -> (V
 }
 
 
-pub fn node_risk(G: &UndirectedCsrGraph<usize>) -> Result<(), Box<dyn Error>> {
-    let trans = arange(0.0, 1.0, 0.01);
+pub fn node_risk(G: &UndirectedCsrGraph<usize>, trans: &Vec<f32>) -> Result<(), Box<dyn Error>> {
     let mut node_risk = vec![vec![0.0; G.node_count()]; trans.len()].to_vec();
     let iterations = 1000;
     for t in 0..trans.len() {
         for _ in 0..iterations {
             let (stats, R) = SIR(G, trans[t], 1);
-            for r in R.iter() {
-                node_risk[t][*r] += 1.0 / (iterations as f64);
+            // Only accept epidemics
+            if R.len() > 30 {
+                for r in R.iter() {
+                    node_risk[t][*r] += 1.0 / (iterations as f32);
+                }
             }
         }
     }

@@ -17,3 +17,19 @@ pub fn get_simple_graph(n: usize, m: usize, N: usize) -> UndirectedCsrGraph<usiz
 
     return graph;
 }
+
+pub fn get_erdos_renyi(N: usize, d: usize) -> UndirectedCsrGraph<usize> {
+    let file_name = format!("erdos_renyi_{}_{}.el", N.to_string().as_str(), d.to_string().as_str());
+    let path = [env!("CARGO_MANIFEST_DIR"), "resources", file_name.as_str()]
+        .iter()
+        .collect::<PathBuf>();
+
+    let graph: UndirectedCsrGraph<usize> = GraphBuilder::new()
+        .csr_layout(CsrLayout::Sorted)
+        .file_format(EdgeListInput::default())
+        .path(path)
+        .build()
+        .expect("loading failed");
+
+    return graph;
+}
