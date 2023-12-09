@@ -12,15 +12,15 @@ pub fn original_cavity(G: &UndirectedCsrGraph<usize>, trans: &Vec<f32>) -> Vec<V
         let mut intermediate_risk = vec![1.0; hashimoto.node_count() as usize];
 
         // Calculate intermediate risks
-        let iterations = 100;
+        let iterations = 1000;
         for _ in 0..iterations {
             for i in 0..hashimoto.node_count() {
                 let mut new_value: f32 = 1.0;
-                for t in hashimoto.out_neighbors_with_values(i as u32){
-                    new_value *= (1.0 - T * intermediate_risk[t.target as usize]); 
+                for t in hashimoto.in_neighbors_with_values(i as u32){
+                    new_value *= 1.0 - (T * intermediate_risk[t.target as usize]); 
                 }
                 new_value = 1.0 - new_value;
-                for t in hashimoto.in_neighbors_with_values(i as u32){
+                for t in hashimoto.out_neighbors_with_values(i as u32){
                     intermediate_risk[t.target as usize] = new_value;
                 }
 
@@ -30,7 +30,7 @@ pub fn original_cavity(G: &UndirectedCsrGraph<usize>, trans: &Vec<f32>) -> Vec<V
         // Calculate final risk
         for (idx, edge) in edge_list.iter().enumerate() {
             let (i, j) = edge;
-            risk[*i] *= (1.0 - T * intermediate_risk[idx]);
+            risk[*j] *= 1.0 - (T * intermediate_risk[idx]);
         }
         for i in 0..risk.len() {
             risk[i] = 1.0 - risk[i];

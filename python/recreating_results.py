@@ -49,6 +49,7 @@ def write_simple_clique_graph_to_rust(n=3, m=3, N=900):
     G = create_simple_clique_graph(n, m, N)
     file_name = f"simple_clique_graph_{n}_{m}_{N}.el"
     file_path = "../rust/resources/" + file_name
+    print("mean degree: ", np.mean([G.degree(n) for n in G.nodes()]))
     nx.write_edgelist(G, file_path, data=False)
 
 
@@ -56,6 +57,7 @@ def write_erdos_to_rust(N=900, p=0.1, mean_degree=None):
     if mean_degree is not None:
         p = mean_degree / N
     G = nx.erdos_renyi_graph(N, p)
+    print("mean degree: ", np.mean([G.degree(n) for n in G.nodes()]))
     file_name = f"erdos_renyi_{N}_{mean_degree}.el"
     file_path = "../rust/resources/" + file_name
     nx.write_edgelist(G, file_path, data=False)
@@ -63,4 +65,5 @@ def write_erdos_to_rust(N=900, p=0.1, mean_degree=None):
 
 if __name__ == "__main__":
     # main()
-    write_erdos_to_rust(N=900, mean_degree=6)
+    write_erdos_to_rust(N=900, mean_degree=3)
+    # write_simple_clique_graph_to_rust()
