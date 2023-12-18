@@ -65,7 +65,7 @@ pub fn node_risk(G: &UndirectedCsrGraph<usize>, trans: &Vec<f32>) -> Result<(), 
         for _ in 0..iterations {
             let (stats, R) = SIR(G, trans[t], 1);
             // Only accept epidemics
-            if R.len() > 50 {
+            if R.len() > 20 {
                 accepted_epidemics += 1;
                 for r in R.iter() {
                     node_risk[t][*r] += 1.0;

@@ -65,5 +65,5 @@ def write_erdos_to_rust(N=900, p=0.1, mean_degree=None):
 
 if __name__ == "__main__":
     # main()
-    write_erdos_to_rust(N=900, mean_degree=3)
-    # write_simple_clique_graph_to_rust()
+    # write_erdos_to_rust(N=900, mean_degree=3)
+    write_simple_clique_graph_to_rust(n=6, m=4, N=900)
